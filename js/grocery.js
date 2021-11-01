@@ -101,12 +101,12 @@ function buy(id) {
         }
     }
     console.log(cartList);
-    
 }
 
 // Exercise 2
 function cleanCart() {
-
+    cartList = [];
+    console.log(cartList);
 }
 
 // Exercise 3
