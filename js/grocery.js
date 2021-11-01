@@ -1,4 +1,18 @@
 // If you have time, you can move this variable "products" to a json file and load the data in this js. It will look more professional
+document.addEventListener('DOMContentLoaded', () => {
+    fetchData();
+});
+
+const fetchData = async () => {
+    try {
+        const res = await fetch('api.json');
+        const data = await res.json()
+        console.log(data);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 var products = [
     {
         id: 1,
@@ -63,15 +77,15 @@ var cart = [];
 
 var subtotal = {
     grocery: {
-        value: 0, 
+        value: 0,
         discount: 0
     },
     beauty: {
-        value: 0, 
+        value: 0,
         discount: 0
     },
     clothes: {
-        value: 0, 
+        value: 0,
         discount: 0
     },
 };
@@ -90,7 +104,7 @@ function cleanCart() {
 
 // Exercise 3
 function calculateSubtotals() {
-    // 1. Create a for loop on the "cartList" array 
+    // 1. Create a for loop on the "cartList" array
     // 2. Implement inside the loop an if...else or switch...case to add the quantities of each type of product, obtaining the subtotals: subtotalGrocery, subtotalBeauty and subtotalClothes
 }
 
@@ -101,7 +115,7 @@ function calculateTotal() {
 
 // Exercise 5
 function generateCart() {
-    // Using the "cartlist" array that contains all the items in the shopping cart, 
+    // Using the "cartlist" array that contains all the items in the shopping cart,
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
 }
 
@@ -112,7 +126,7 @@ function applyPromotionsCart() {
 
 // Exercise 7
 function addToCart(id) {
-    // Refactor previous code in order to simplify it 
+    // Refactor previous code in order to simplify it
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
 }
