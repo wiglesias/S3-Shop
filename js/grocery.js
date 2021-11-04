@@ -225,6 +225,19 @@ function addToCart(id) {
 function removeFromCart(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
+    for (let i = 0; i < products.length; i++) {
+        if(i === id - 1) {
+            let index = cart.findIndex(product => {
+                product.name === products[i].name
+            });
+            if(index > -1  && cart[index].quantity > 1) {
+                cart[index].quantity -= 1;
+                cart[index].subtotal -= cart[index].price;
+            } else if (index > -1 && cart[index].quantity == 1) {
+                cart.splice(index, 1);
+            }
+        }
+    }
 }
 
 // Exercise 10
