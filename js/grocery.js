@@ -113,17 +113,41 @@ function cleanCart() {
 function calculateSubtotals() {
     // 1. Create a for loop on the "cartList" array
     // 2. Implement inside the loop an if...else or switch...case to add the quantities of each type of product, obtaining the subtotals: subtotalGrocery, subtotalBeauty and subtotalClothes
+    for (let i = 0; i < cartList.length; i++) {
+            switch (cartList[i].type) {
+                case 'grocery':
+                    subtotal.grocery.value += cartList[i].price;
+                    break;
+                case 'beauty':
+                    subtotal.beauty.value += cartList[i].price;
+                    break;
+                case 'clothes':
+                    subtotal.clothes.value += cartList[i].price;
+                    break
+                default:
+                    console.log('the cart is empty!');
+            }
+    }
+    console.log(`Subtotal grocery is: ${subtotal.grocery.value}`);
+    console.log(`Subtotal beauty is: ${subtotal.beauty.value}`);
+    console.log(`Subtotal clothes is: ${subtotal.clothes.value}`);
 }
 
 // Exercise 4
 function calculateTotal() {
     // Calculate total price of the cart either using the "cartList" array
+    for (let category in subtotal) {
+        total += subtotal[category].value;
+    }
+
+    console.log(total);
 }
 
 // Exercise 5
 function generateCart() {
     // Using the "cartlist" array that contains all the items in the shopping cart,
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
+
 }
 
 // Exercise 6
