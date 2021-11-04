@@ -148,28 +148,42 @@ function generateCart() {
     // Using the "cartlist" array that contains all the items in the shopping cart,
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
     for (let i = 0; i < cartList.length; i++) {
-        let index = cart.findIndex((product) => {
+        let index = cart.findIndex(product => {
             product.name === cartList[i].name;
         });
         if (index > -1) {
             cart[index].quantity += 1;
+            cart[index].subtotal += cart[index].price;
         } else {
             let newItem = {
                 name: cartList[i].name,
                 price: cartList[i].price,
                 type: cartList[i].type,
-                quantity: 1
+                quantity: 1,
+                subtotal: cartList[i].price,
+                subtotalWithDiscount: 0
             }
             cart.push(newItem);
         }
     }
-    console.log(cart);
+    // console.log(cart);
 }
 
 // Exercise 6
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
-
+    let cookingOilIndex = cart.findIndex(product => {
+        product.name === 'cooking oil';
+    });
+    let instantCupcakeMixtureIndex = cart.findIndex(product => {
+        product.name === 'Instant cupcake mixture';
+    });
+    if (instantCupcakeMixtureIndex > -1 && cart[cookingOilIndex].quantity >= 3) {
+        cart[cookingOilIndex].subtotalWithDiscount = cart[cookingOilIndex].quantity * 10;
+    }
+    if (instantCupcakeMixtureIndex > -1 && cart[instantCupcakeMixtureIndex].quantity >= 10) {
+        cart[instantCupcakeMixtureIndex].subtotalWithDiscount = cart[instantCupcakeMixtureIndex].subtotal * 2/3;
+    }
 }
 
 // Exercise 7
