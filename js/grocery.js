@@ -107,6 +107,7 @@ function buy(id) {
 function cleanCart() {
     cartList = [];
     cart = [];
+    clearTotals();
     // console.log(cartList, cart);
 }
 
@@ -133,9 +134,7 @@ function calculateSubtotals() {
                 if (cart[i].subtotalWithDiscount !== 0) {
                     subtotal.clothes.discount += (cart[i].subtotal - cart[i].subtotalWithDiscount);
                 }
-                break
-            default:
-                console.log('the cart is empty!');
+                break;
         }
     }
 }
@@ -144,7 +143,7 @@ function calculateSubtotals() {
 function calculateTotal() {
     // Calculate total price of the cart either using the "cartList" array
     for (let category in subtotal) {
-        total += subtotal[category].value;
+        total += subtotal[category].value - subtotal[category].discount;
     }
     // console.log(total);
 }
@@ -243,4 +242,68 @@ function removeFromCart(id) {
 // Exercise 10
 function printCart() {
     // Fill the shopping cart modal manipulating the shopping cart dom
+    let list = document.querySelector(".list");
+    let tatalBill = document.querySelector(".bill");
+
+    applyPromotionsCart();
+    clearTotals();
+    list.innerHTML = "";
+
+    if(cart.length > 0){
+        for(i = 0; i < cart.length; i++){
+            let listItem = document.createElement("li");
+
+            let descriptionQuantityPrice = document.createTextNode(cart[i].name + " x " + cart[i].quantity + " : $" + cart[i].subtotal);
+            let button = document.createElement("button");
+            if(cart[i].quantity > 1){
+                button.classList.add("btn-decrement");
+                button.innerHTML = "-1";
+            } else {
+                button.classList.add("btn-remove");
+                button.innerHTML = "X";
+            }
+            let index = products.findIndex(product => product.name === cart[i].name) + 1;
+            button.onclick = function () {
+                removeFromCart(index);
+                printCart();
+            }
+
+            listItem.appendChild(descriptionQuantityPrice);
+            listItem.appendChild(button);
+            list.appendChild(listItem);
+
+            if(cart[i].subtotalWithDiscount !== 0){
+                let difference = cart[i].subtotal - cart[i].subtotalWithDiscount;
+
+                let listDiscount = document.createElement("li");
+                listDiscount.classList.add("discount");
+                listDiscount.appendChild(document.createTextNode(cart[i].name + " discount: -$" + difference));
+                list.appendChild(listDiscount);
+            }
+        }
+
+        calculateSubtotals();
+        calculateTotal();
+        tatalBill.innerHTML = "Total: $" + total;
+    } else {
+        tatalBill.innerHTML = "Your cart is empty";
+    }
+}
+
+function clearTotals() {
+    subtotal = {
+        grocery: {
+            value: 0,
+            discount: 0
+        },
+        beauty: {
+            value: 0,
+            discount: 0
+        },
+        clothes: {
+            value: 0,
+            discount: 0
+        },
+    };
+    total = 0;
 }
