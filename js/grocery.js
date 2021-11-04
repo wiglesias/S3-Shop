@@ -1,17 +1,17 @@
 // If you have time, you can move this variable "products" to a json file and load the data in this js. It will look more professional
-document.addEventListener('DOMContentLoaded', () => {
-    fetchData();
-});
+// document.addEventListener('DOMContentLoaded', () => {
+//     fetchData();
+// });
 
-const fetchData = async () => {
-    try {
-        const res = await fetch('api.json');
-        const data = await res.json()
-        console.log(data);
-    } catch (error) {
-        console.log(error);
-    }
-};
+// const fetchData = async () => {
+//     try {
+//         const res = await fetch('api.json');
+//         const data = await res.json()
+//         console.log(data);
+//     } catch (error) {
+//         console.log(error);
+//     }
+// };
 
 var products = [
     {
@@ -95,18 +95,19 @@ var total = 0;
 function buy(id) {
     // 1. Loop for to the array products to get the item to add to cart
     for (let i = 0; i < products.length; i++) {
-        if (id === products.indexOf(products[i])) {
+        if (i === id - 1) {
             // 2. Add found product to the cartList array
             cartList.push(products[i]);
         }
     }
-    console.log(cartList);
+    // console.log(cartList);
 }
 
 // Exercise 2
 function cleanCart() {
     cartList = [];
-    console.log(cartList);
+    cart = [];
+    // console.log(cartList, cart);
 }
 
 // Exercise 3
@@ -114,23 +115,29 @@ function calculateSubtotals() {
     // 1. Create a for loop on the "cartList" array
     // 2. Implement inside the loop an if...else or switch...case to add the quantities of each type of product, obtaining the subtotals: subtotalGrocery, subtotalBeauty and subtotalClothes
     for (let i = 0; i < cartList.length; i++) {
-            switch (cartList[i].type) {
-                case 'grocery':
-                    subtotal.grocery.value += cartList[i].price;
-                    break;
-                case 'beauty':
-                    subtotal.beauty.value += cartList[i].price;
-                    break;
-                case 'clothes':
-                    subtotal.clothes.value += cartList[i].price;
-                    break
-                default:
-                    console.log('the cart is empty!');
-            }
+        switch (cartList[i].type) {
+            case 'grocery':
+                subtotal.grocery.value += cartList[i].price;
+                if (cart[i].subtotalWithDiscount !== 0) {
+                    subtotal.grocery.discount += (cart[i].subtotal - cart[i].subtotalWithDiscount);
+                }
+                break;
+            case 'beauty':
+                subtotal.beauty.value += cartList[i].price;
+                if (cart[i].subtotalWithDiscount !== 0) {
+                    subtotal.beauty.discount += (cart[i].subtotal - cart[i].subtotalWithDiscount);
+                }
+                break;
+            case 'clothes':
+                subtotal.clothes.value += cartList[i].price;
+                if (cart[i].subtotalWithDiscount !== 0) {
+                    subtotal.clothes.discount += (cart[i].subtotal - cart[i].subtotalWithDiscount);
+                }
+                break
+            default:
+                console.log('the cart is empty!');
+        }
     }
-    console.log(`Subtotal grocery is: ${subtotal.grocery.value}`);
-    console.log(`Subtotal beauty is: ${subtotal.beauty.value}`);
-    console.log(`Subtotal clothes is: ${subtotal.clothes.value}`);
 }
 
 // Exercise 4
@@ -139,8 +146,7 @@ function calculateTotal() {
     for (let category in subtotal) {
         total += subtotal[category].value;
     }
-
-    console.log(total);
+    // console.log(total);
 }
 
 // Exercise 5
@@ -184,6 +190,7 @@ function applyPromotionsCart() {
     if (instantCupcakeMixtureIndex > -1 && cart[instantCupcakeMixtureIndex].quantity >= 10) {
         cart[instantCupcakeMixtureIndex].subtotalWithDiscount = cart[instantCupcakeMixtureIndex].subtotal * 2/3;
     }
+    console.log(cart);
 }
 
 // Exercise 7
@@ -191,6 +198,27 @@ function addToCart(id) {
     // Refactor previous code in order to simplify it
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
+    for (let i = 0; i < products.length; i++) {
+        if (i === id - 1) {
+            let index = cart.findIndex(product => {
+            product.name === products[i].name;
+            });
+            if (index > -1) {
+                cart[index].quantity += 1;
+                cart[index].subtotal += cart[index].price;
+            } else {
+                let newProductItem = {
+                    name: products[i].name,
+                    price: products[i].price,
+                    type: products[i].type,
+                    quantity: 1,
+                    subtotal: products[i].price,
+                    subtotalWithDiscount: 0
+                }
+                cart.push(newProductItem);
+            }
+        }
+    }
 }
 
 // Exercise 9
