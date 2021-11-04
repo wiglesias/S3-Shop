@@ -17,34 +17,46 @@ function validate() {
 
     if (firstName.value.length < 3) {
         firstName.classList.add('invalid');
-        errorName.innerHTML = "Name must be at least 3 characters";
+        errorName.innerHTML = 'Name must be at least 3 characters';
         errorName.style.display = 'inline';
     } else if (!firstName.value.match(letters)) {
         firstName.classList.add('invalid');
         errorName.style.display = 'inline';
     } else {
-        firstName.classList.remove("invalid");
+        firstName.classList.remove('invalid');
         errorName.style.display="none";
     }
 
     if(phone.value.length < 3){
-        phone.classList.add("invalid");
-        errorPhone.innerHTML = "Phone must be at least 3 numbers"
-        errorPhone.style.display="inline";
+        phone.classList.add('invalid');
+        errorPhone.innerHTML = 'Phone must be at least 3 numbers';
+        errorPhone.style.display = 'inline';
     } else {
-        phone.classList.remove("invalid");
-        errorPhone.style.display="none";
+        phone.classList.remove('invalid');
+        errorPhone.style.display = 'none';
+    }
+
+    if(password.value.length < 3){
+        password.classList.add('invalid');
+        errorPassword.innerHTML = 'Password must be at least 3 characters';
+        errorPassword.style.display = 'inline';
+    } else if(!password.value.match(/\d/) || !password.value.match(/[A-Z]/i)) {
+        password.classList.add('invalid');
+        errorPassword.style.display = 'inline';
+    } else {
+        password.classList.remove('invalid');
+        errorPassword.style.display = 'none';
     }
 
     if(email.value.length < 3){
-        email.classList.add("invalid");
-        errorEmail.innerHTML = "Email must be at least 3 characters"
-        errorEmail.style.display="inline";
+        email.classList.add('invalid');
+        errorEmail.innerHTML = 'Email must be at least 3 characters';
+        errorEmail.style.display = 'inline';
     } else if(email.validity.typeMismatch) {
-        email.classList.add("invalid");
-        errorEmail.style.display="inline";
+        email.classList.add('invalid');
+        errorEmail.style.display = 'inline';
     } else {
-        email.classList.remove("invalid");
-        errorEmail.style.display="none";
+        email.classList.remove('invalid');
+        errorEmail.style.display = 'none';
     }
 }
