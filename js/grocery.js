@@ -114,26 +114,27 @@ function cleanCart() {
 // Exercise 3
 function calculateSubtotals() {
     // 1. Create a for loop on the "cartList" array
-    // 2. Implement inside the loop an if...else or switch...case to add the quantities of each type of product, obtaining the subtotals: subtotalGrocery, subtotalBeauty and subtotalClothes
-    for (let i = 0; i < cartList.length; i++) {
-        switch (cartList[i].type) {
+    // 2. Implement inside the loop an if...else or switch...case to add the quantities of each type of product,
+    //    obtaining the subtotals: subtotalGrocery, subtotalBeauty and subtotalClothes
+    for (let i = 0; i < cart.length; i++) {
+        switch (cart[i].type) {
             case 'grocery':
-                subtotal.grocery.value += cartList[i].price;
                 if (cart[i].subtotalWithDiscount !== 0) {
                     subtotal.grocery.discount += (cart[i].subtotal - cart[i].subtotalWithDiscount);
                 }
+                subtotal.grocery.value += cart[i].subtotal;
                 break;
             case 'beauty':
-                subtotal.beauty.value += cartList[i].price;
                 if (cart[i].subtotalWithDiscount !== 0) {
                     subtotal.beauty.discount += (cart[i].subtotal - cart[i].subtotalWithDiscount);
                 }
+                subtotal.beauty.value += cart[i].subtotal;
                 break;
             case 'clothes':
-                subtotal.clothes.value += cartList[i].price;
                 if (cart[i].subtotalWithDiscount !== 0) {
                     subtotal.clothes.discount += (cart[i].subtotal - cart[i].subtotalWithDiscount);
                 }
+                subtotal.clothes.value += cart[i].subtotal;
                 break;
         }
     }
@@ -144,6 +145,7 @@ function calculateTotal() {
     // Calculate total price of the cart either using the "cartList" array
     for (let category in subtotal) {
         total += subtotal[category].value - subtotal[category].discount;
+        total = +total.toFixed(2);
     }
     // console.log(total);
 }
@@ -177,19 +179,20 @@ function generateCart() {
 // Exercise 6
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
-    let cookingOilIndex = cart.findIndex(product => {
-        product.name === 'cooking oil';
-    });
-    let instantCupcakeMixtureIndex = cart.findIndex(product => {
-        product.name === 'Instant cupcake mixture';
-    });
-    if (instantCupcakeMixtureIndex > -1 && cart[cookingOilIndex].quantity >= 3) {
+    let cookingOilIndex = cart.findIndex(product => product.name === 'cooking oil');
+    let instantCupcakeMixtureIndex = cart.findIndex(product => product.name === 'Instant cupcake mixture');
+    if (cookingOilIndex > -1 && cart[cookingOilIndex].quantity >= 3) {
         cart[cookingOilIndex].subtotalWithDiscount = cart[cookingOilIndex].quantity * 10;
+    } else if (cookingOilIndex > -1) {
+        // todo
+        cart[cookingOilIndex].subtotalWithDiscount = 0;
     }
     if (instantCupcakeMixtureIndex > -1 && cart[instantCupcakeMixtureIndex].quantity >= 10) {
-        cart[instantCupcakeMixtureIndex].subtotalWithDiscount = cart[instantCupcakeMixtureIndex].subtotal * 2/3;
+        cart[instantCupcakeMixtureIndex].subtotalWithDiscount = (cart[instantCupcakeMixtureIndex].subtotal * 2/3).toFixed(2);
+    } else if (instantCupcakeMixtureIndex > -1) {
+        cart[instantCupcakeMixtureIndex].subtotalWithDiscount = 0;
     }
-    console.log(cart);
+    // console.log(cart);
 }
 
 // Exercise 7
@@ -199,9 +202,7 @@ function addToCart(id) {
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
     for (let i = 0; i < products.length; i++) {
         if (i === id - 1) {
-            let index = cart.findIndex(product => {
-            product.name === products[i].name;
-            });
+            let index = cart.findIndex(product => product.name === products[i].name);
             if (index > -1) {
                 cart[index].quantity += 1;
                 cart[index].subtotal += cart[index].price;
@@ -226,9 +227,7 @@ function removeFromCart(id) {
     // 2. Add found product to the cartList array
     for (let i = 0; i < products.length; i++) {
         if(i === id - 1) {
-            let index = cart.findIndex(product => {
-                product.name === products[i].name
-            });
+            let index = cart.findIndex(product => product.name === products[i].name);
             if(index > -1  && cart[index].quantity > 1) {
                 cart[index].quantity -= 1;
                 cart[index].subtotal -= cart[index].price;
@@ -242,8 +241,8 @@ function removeFromCart(id) {
 // Exercise 10
 function printCart() {
     // Fill the shopping cart modal manipulating the shopping cart dom
-    let list = document.querySelector(".list");
-    let tatalBill = document.querySelector(".bill");
+    let list = document.querySelector('.list');
+    let totalBill = document.querySelector('.bill');
 
     applyPromotionsCart();
     clearTotals();
@@ -251,15 +250,15 @@ function printCart() {
 
     if(cart.length > 0){
         for(i = 0; i < cart.length; i++){
-            let listItem = document.createElement("li");
+            let listItem = document.createElement('li');
 
             let descriptionQuantityPrice = document.createTextNode(cart[i].name + " x " + cart[i].quantity + " : $" + cart[i].subtotal);
-            let button = document.createElement("button");
+            let button = document.createElement('button');
             if(cart[i].quantity > 1){
-                button.classList.add("btn-decrement");
+                button.classList.add('btn-decrement');
                 button.innerHTML = "-1";
             } else {
-                button.classList.add("btn-remove");
+                button.classList.add('btn-remove');
                 button.innerHTML = "X";
             }
             let index = products.findIndex(product => product.name === cart[i].name) + 1;
@@ -276,7 +275,7 @@ function printCart() {
                 let difference = cart[i].subtotal - cart[i].subtotalWithDiscount;
 
                 let listDiscount = document.createElement("li");
-                listDiscount.classList.add("discount");
+                listDiscount.classList.add('discount');
                 listDiscount.appendChild(document.createTextNode(cart[i].name + " discount: -$" + difference));
                 list.appendChild(listDiscount);
             }
@@ -284,9 +283,9 @@ function printCart() {
 
         calculateSubtotals();
         calculateTotal();
-        tatalBill.innerHTML = "Total: $" + total;
+        totalBill.innerHTML = "Total: $" + total;
     } else {
-        tatalBill.innerHTML = "Your cart is empty";
+        totalBill.innerHTML = "Your cart is empty";
     }
 }
 
