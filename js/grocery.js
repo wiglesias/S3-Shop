@@ -252,11 +252,11 @@ function printCart() {
         for(i = 0; i < cart.length; i++){
             let listItem = document.createElement('li');
 
-            let descriptionQuantityPrice = document.createTextNode(cart[i].name + " x " + cart[i].quantity + " : $" + cart[i].subtotal);
+            let descriptionQuantityPrice = document.createTextNode(`${cart[i].name} x ${cart[i].quantity} : $ ${cart[i].subtotal}`);
             let button = document.createElement('button');
             if(cart[i].quantity > 1){
                 button.classList.add('btn-decrement');
-                button.innerHTML = "-1";
+                button.innerHTML = "-";
             } else {
                 button.classList.add('btn-remove');
                 button.innerHTML = "X";
@@ -276,14 +276,14 @@ function printCart() {
 
                 let listDiscount = document.createElement("li");
                 listDiscount.classList.add('discount');
-                listDiscount.appendChild(document.createTextNode(cart[i].name + " discount: -$" + difference));
+                listDiscount.appendChild(document.createTextNode(`${cart[i].name} discount: -$ ${difference}`));
                 list.appendChild(listDiscount);
             }
         }
 
         calculateSubtotals();
         calculateTotal();
-        totalBill.innerHTML = "Total: $" + total;
+        totalBill.innerHTML = `Total: $ ${total}`;
     } else {
         totalBill.innerHTML = "Your cart is empty";
     }
